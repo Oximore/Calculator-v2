@@ -1,0 +1,104 @@
+﻿<Application
+    x:Class="Calculator.UI.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Calculator.UI"
+    StartupUri="Views/OperationView.xaml">
+
+    <Application.Resources>
+
+        <Style TargetType="Grid">
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <Style x:Key="OperationStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="DarkGray" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="Margin" Value="8" />
+        </Style>
+
+        <Style x:Key="ResultStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="44" />
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="Margin" Value="8" />
+            <Setter Property="FontWeight" Value="DemiBold" />
+        </Style>
+
+
+
+        <Style x:Key="NumberStyle" TargetType="Button">
+            <Setter Property="Background" Value="#3B3B3B" />
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Margin" Value="1.5" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#323232" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#282828" />
+                </Trigger>
+            </Style.Triggers>
+
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="4" />
+                </Style>
+            </Style.Resources>
+        </Style>
+
+        <Style
+            x:Key="OperatorStyle"
+            BasedOn="{StaticResource NumberStyle}"
+            TargetType="Button">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Light" />
+            <Setter Property="Background" Value="#323232" />
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3B3B3B" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#323232" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style
+            x:Key="EqualStyle"
+            BasedOn="{StaticResource NumberStyle}"
+            TargetType="Button">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="Background" Value="#838481" />
+            <Setter Property="Foreground" Value="Black" />
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#797877" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#6F6E6D" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Application.Resources>
+
+</Application>
