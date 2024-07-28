@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Calculator.Server.API/calculator_data.db3
+/Calculator.Server.API/calculator_data.db3-shm
+/Calculator.Server.API/calculator_data.db3-wal
