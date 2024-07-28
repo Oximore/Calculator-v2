@@ -4,14 +4,11 @@ namespace Calculator.Data.Models
 {
     public class Operation : IOperation
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
-        private List<double> operands = [];
-        public List<double> Operands => operands;
+        public List<double> Operands { get; set; } = [];
+        public List<Operator> Operators { get; set; } = [];
 
-        private List<Operator> @operator = [];
-        public List<Operator> Operators => @operator;
-
-        public bool Computable => (Operands.Count() == Operators.Count() + 1);
+        public bool Computable => (Operands.Count == Operators.Count + 1);
     }
 }

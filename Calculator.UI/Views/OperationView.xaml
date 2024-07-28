@@ -24,10 +24,12 @@
             <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
+            <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="0.5*" />
+            <RowDefinition />
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
@@ -48,6 +50,13 @@
             Grid.ColumnSpan="4"
             Style="{StaticResource ResultStyle}"
             Text="{Binding ResultText}" />
+
+
+        <ListView
+            Grid.Row="0"
+            Grid.RowSpan="20"
+            Grid.Column="4"
+            ItemsSource="{Binding OperationHistory}" />
 
         <Button
             Grid.Row="2"
@@ -162,5 +171,15 @@
             CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}"
             Content="+"
             Style="{StaticResource OperatorStyle}" />
+
+
+        <Button
+            Grid.Row="6"
+            Grid.Column="0"
+            Grid.ColumnSpan="20"
+            Command="{Binding ClearHistoryCommand}"
+            Content="Clear History"
+            Style="{StaticResource OperatorStyle}" />
+
     </Grid>
 </Window>

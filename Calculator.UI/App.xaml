@@ -27,7 +27,11 @@
             <Setter Property="FontWeight" Value="DemiBold" />
         </Style>
 
-
+        <Style TargetType="ListView">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="#202020" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
 
         <Style x:Key="NumberStyle" TargetType="Button">
             <Setter Property="Background" Value="#3B3B3B" />

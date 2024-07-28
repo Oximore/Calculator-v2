@@ -1,22 +1,24 @@
 ﻿using Calculator.Data.Models;
 using static Calculator.Data.Models.IOperation;
-using System.Windows.Controls;
-using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Calculator.UI.Servicies;
+using Calculator.Data.Repositories;
+using Calculator.Data.Repositories.SQL;
+using Calculator.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 
 namespace Calculator.UI.ViewModels
 {
-
-    //[ObservableObject]
     public partial class OperationViewModel : ObservableObject
     {
-
         // Servicies
+
         private OperationService operationService = new();
-        private Operation operation = new();
-        private bool newNumber = true;
+        private static IOperationRepository operationRepository;
+
+        // Observables
 
         [ObservableProperty]
         private string resultText = "";
@@ -24,15 +26,26 @@ namespace Calculator.UI.ViewModels
         [ObservableProperty]
         private string operationText = "";
 
-        //[ObservableProperty]
-        //private string currentText = "";
+        public ObservableCollection<string> OperationHistory { get; set; } = new ObservableCollection<string>();
 
+        // Others members
+        private Operation operation = new();
+        private bool newNumber = true;
 
+        // Ctor
+        public OperationViewModel()
+        {
+            DbContextOptionsBuilder<DataContext> optionsBuilder = new();
+            string filename = "calculator_data.db3";
+            optionsBuilder.UseSqlite($"DataSource = {filename}");
+            DbContextOptions<DataContext> option = optionsBuilder.Options;
+            DataContext dataContext = new DataContext(option);
+            operationRepository = new SQLOperationRepository(dataContext);
 
-        //private string operand1 = "", operand2 = "";
-        //private string @operator = ""; // @ car operator mot-clef c#
+            UpdateHistory();
+        }
 
-
+        // Relay Commands
 
         [RelayCommand]
         private void AddDigit(string digit)
@@ -53,16 +66,6 @@ namespace Calculator.UI.ViewModels
             }
             UpdateOperationText();
         }
-
-        private void ValidateAndClearCurrentNumber(string remplace = "") {
-            if (Double.TryParse(ResultText, out double current))
-            {
-                operation.Operands.Add(current);
-                ResultText = remplace;
-            }
-        }
-
-
 
         [RelayCommand]
         private void AddOperator(string @operator)
@@ -92,76 +95,48 @@ namespace Calculator.UI.ViewModels
             {
                 ResultText = $"{OperationService.Compute(operation)}";
                 OperationText += " = ";
+
+                operationRepository.Create(operation);
+                UpdateHistory();
+
                 operation = new Operation();
                 newNumber = true;
             }
         }
 
+        [RelayCommand]
+        private void ClearHistory()
+        {
+            foreach (Operation operation in operationRepository.ReadAll())
+                operationRepository.Delete(operation.Id);
+            UpdateHistory();
+        }
+
+        // Others Methods
+
+        private void ValidateAndClearCurrentNumber(string remplace = "")
+        {
+            if (Double.TryParse(ResultText, out double current))
+            {
+                operation.Operands.Add(current);
+                ResultText = remplace;
+            }
+        }
+
+        private void UpdateHistory()
+        {
+            OperationHistory.Clear();
+            foreach (Operation operation in operationRepository.ReadAll())
+            {
+                OperationHistory.Add($"{OperationService.ToString(operation)} = {OperationService.Compute(operation)}");
+            }
+        }
 
         private void UpdateOperationText()
         {
-            //string text = OperationService.ToString(operation);
-            //OperationText = (text.Any() ? text : ResultText);
             OperationText = OperationService.ToString(operation);
             if (operation.Computable)
                 OperationText += ResultText;
         }
-
-
-        //private void DigitButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (sender is not Button button)
-        //        return;
-
-        //    if (button.Content is not string digit)
-        //        return;
-
-        //    if (!string.IsNullOrEmpty(@operator) &&
-        //        string.IsNullOrEmpty(operand2))
-        //        resultText.Text = "";
-
-        //    if (string.IsNullOrEmpty(@operator))
-        //        operand1 += digit;
-        //    else
-        //        operand2 += digit;
-
-        //    resultText.Text += digit;
-        //}
-
-        //private void OperatorButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (sender is not Button button)
-        //        return;
-
-        //    if (button.Content is not string @operator)
-        //        return;
-
-        //    this.@operator = @operator;
-        //}
-
-        //private void EqualButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (!double.TryParse(operand1, out double value1))
-        //        return;
-
-        //    if (!double.TryParse(operand2, out double value2))
-        //        return;
-
-        //    double result;
-
-        //    switch (@operator)
-        //    {
-        //        case "+": result = value1 + value2; break;
-        //        case "−": result = value1 - value2; break;
-        //        case "×": result = value1 * value2; break;
-        //        case "÷": result = value1 / value2; break;
-        //        default: return;
-        //    }
-
-        //    resultText.Text = result.ToString("0.#########");
-
-        //    // Reset
-        //    operand1 = operand2 = @operator = "";
-        //}
     }
 }
