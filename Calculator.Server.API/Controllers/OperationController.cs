@@ -9,9 +9,9 @@ namespace Calculator.Server.API.Controllers
     public class OperationController : ControllerBase
     {
 
-        private readonly OperationRepository operationRepository;
+        private readonly IOperationRepository operationRepository;
 
-        public OperationController(OperationRepository operationRepository)
+        public OperationController(IOperationRepository operationRepository)
         {
             this.operationRepository = operationRepository;
         }
@@ -29,7 +29,15 @@ namespace Calculator.Server.API.Controllers
         {
             return operationRepository.Create(operation);
         }
-s
+
+        // DELETE: Operation/id
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
+        {
+            operationRepository.Delete(id);
+            return Ok();
+        }
+
         //// GET: Operation/id
         //[HttpGet("{id}")]
         //public ActionResult<Operation> GetOne(int id)

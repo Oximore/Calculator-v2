@@ -8,6 +8,7 @@ using Calculator.Data.Repositories.SQL;
 using Calculator.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using Calculator.Data.Repositories.API;
 
 namespace Calculator.UI.ViewModels
 {
@@ -35,12 +36,13 @@ namespace Calculator.UI.ViewModels
         // Ctor
         public OperationViewModel()
         {
-            DbContextOptionsBuilder<DataContext> optionsBuilder = new();
-            string filename = "calculator_data.db3";
-            optionsBuilder.UseSqlite($"DataSource = {filename}");
-            DbContextOptions<DataContext> option = optionsBuilder.Options;
-            DataContext dataContext = new DataContext(option);
-            operationRepository = new SQLOperationRepository(dataContext);
+            //DbContextOptionsBuilder<DataContext> optionsBuilder = new();
+            //string filename = "calculator_data.db3";
+            //optionsBuilder.UseSqlite($"DataSource = {filename}");
+            //DbContextOptions<DataContext> option = optionsBuilder.Options;
+            //DataContext dataContext = new DataContext(option);
+            //operationRepository = new SQLOperationRepository(dataContext);
+            operationRepository = new APIOperationRepository();
 
             UpdateHistory();
         }

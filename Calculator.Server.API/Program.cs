@@ -1,4 +1,9 @@
 
+using Calculator.Data;
+using Calculator.Data.Repositories;
+using Calculator.Data.Repositories.SQL;
+using Microsoft.EntityFrameworkCore;
+
 namespace Calculator.Server.API
 {
     public class Program
@@ -14,6 +19,9 @@ namespace Calculator.Server.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddDbContext<DataContext>(options => options.UseSqlite($"DataSource = calculator_data.db3"));
+            builder.Services.AddScoped<IOperationRepository, SQLOperationRepository>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -23,7 +31,7 @@ namespace Calculator.Server.API
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseAuthorization();
 
